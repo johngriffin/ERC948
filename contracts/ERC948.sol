@@ -1,8 +1,6 @@
 pragma solidity ^0.4.23;
 
 import 'zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
-
 
 contract ERC948 {
 
@@ -14,15 +12,12 @@ contract ERC948 {
         uint amountInitial;
         uint periodMultiplier;
         uint startTime;
-        uint externalSubId;
         string data;
         bool active;
 
-        // TODO - create a struct for period
         // uint _periodType;
         // uint terminationDate;
         // uint nextPaymentTime;
-
     }
 
     mapping (bytes32 => Subscription) public subscriptions;
@@ -36,8 +31,7 @@ contract ERC948 {
     * @param _periodType Can be hour, day, week, month, year
     * @param _periodMultiplier The number of periodType that must elapse before the next payment is due
     * @param _startTime Date that the subscription becomes active
-    * @param _externalSubId A unique ID for this subscription
-    * @return A boolean to indicate whether the subscription was created successfully
+    * @return A bytes32 for the created subscriptionId
     */
     function createSubscription(
         address _payeeAddress,
@@ -47,21 +41,23 @@ contract ERC948 {
         uint _periodType,
         uint _periodMultiplier,
         uint _startTime,
-        uint _externalSubId,
         string _data
         )
         public
-        returns (bool success)
+        returns (bytes32)
     {
         require(msg.sender != 0x0);
         require(_startTime >= block.timestamp);
-        require(_externalSubId != 0);
 
-        // TODO avoid hash clash
-        // require(subscriptions[keccak256(_externalSubId)] == false);
+		// 		Check that owner has a balance of at least the initial and first recurring payment
+    //    StandardToken token = StandardToken(_tokenAddress);
+    //    uint amountRequired = _amountInitial + _amountRecurring;
+    //    require(token.balanceOf(msg.sender) >= amountRequired);
+
+        // TODO Check that contact has approval for at least the initial and first recurring payment
+
 
         Subscription memory newSubscription = Subscription({
-
             owner: msg.sender,
             payeeAddress: _payeeAddress,
             tokenAddress: _tokenAddress,
@@ -69,7 +65,6 @@ contract ERC948 {
             amountInitial: _amountInitial,
             periodMultiplier: _periodMultiplier,
             startTime: _startTime,
-            externalSubId: _externalSubId,
             data: _data,
             active: true
 
@@ -77,34 +72,40 @@ contract ERC948 {
         });
 
         // Save subscription
-        subscriptions[keccak256(_externalSubId)] = newSubscription;
+        bytes32 subscriptionId = keccak256(msg.sender, block.timestamp);
+        subscriptions[subscriptionId] = newSubscription;
+        // TODO avoid hash clash
 
-        // take initial payment
-        // authorize future payments
-        // emit event
-        // return
+        // Make initial payment
+    //    token.transferFrom(msg.sender, _payeeAddress, _amountInitial);
+
+        // TODO Emit event
+
+        // TODO return bytes32 subscriptionId
+        return subscriptionId;
     }
 
     /**
     * @dev Called by or on behalf of the merchant, in order to initiate a scheduled/approved payment.
-    * @param _externalSubId The subscription ID to process payments for
+    * @param _subscriptionId The subscription ID to process payments for
     * @param _amount Amount to be transferred, can be lower than total allowable amount
     * @return A boolean to indicate whether the payment was successful
     */
     function processSubscription(
-        uint _externalSubId,
+        bytes32 _subscriptionId,
         uint _amount
         )
         public
-        returns (bool success)
+        returns (bool)
     {
-        Subscription storage subscription = subscriptions[keccak256(_externalSubId)];
+        Subscription storage subscription = subscriptions[_subscriptionId];
 
         require(_amount < subscription.amountRecurring);
+        require(block.timestamp > subscription.startTime);
 
         // TODO ensure that a payment is due
 
-        StandardToken token;
+        StandardToken token = StandardToken(subscription.tokenAddress);
         token.transferFrom(subscription.owner, subscription.payeeAddress, _amount);
         return true;
     }
