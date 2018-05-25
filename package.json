@@ -1,0 +1,18 @@
+{
+  "name": "erc948",
+  "version": "1.0.0",
+  "description": "Recurring payments for Ethereum",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "John Griffin <john@atchai.com>",
+  "license": "ISC",
+  "dependencies": {
+    "truffle-hdwallet-provider": "0.0.5",
+    "zeppelin-solidity": "^1.9.0"
+  }
+}
