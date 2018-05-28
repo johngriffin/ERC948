@@ -22,6 +22,17 @@ contract ERC948 {
 
     mapping (bytes32 => Subscription) public subscriptions;
 
+    event NewSubscription(
+        bytes32 _subscriptionId,
+        address _payeeAddress,
+        address _tokenAddress,
+        uint _amountRecurring,
+        uint _amountInitial,
+        uint _periodType,
+        uint _periodMultiplier,
+        uint _startTime
+        );
+
     /**
     * @dev Called by the subscriber on their own wallet, using data initiated by the merchant in a checkout flow.
     * @param _payeeAddress The address that will receive payments
@@ -46,16 +57,19 @@ contract ERC948 {
         public
         returns (bytes32)
     {
-        require(msg.sender != 0x0);
-        require(_startTime >= block.timestamp);
+        // Check that subscription start time is now or in the future
+        require((_startTime >= block.timestamp),
+                'Subscription must not start in the past');
 
-		// 		Check that owner has a balance of at least the initial and first recurring payment
-    //    StandardToken token = StandardToken(_tokenAddress);
-    //    uint amountRequired = _amountInitial + _amountRecurring;
-    //    require(token.balanceOf(msg.sender) >= amountRequired);
+        // Check that owner has a balance of at least the initial and first recurring payment
+        StandardToken token = StandardToken(_tokenAddress);
+        uint amountRequired = _amountInitial + _amountRecurring;
+        require((token.balanceOf(msg.sender) >= amountRequired),
+                'Insufficient balance for initial + 1x recurring amount');
 
-        // TODO Check that contact has approval for at least the initial and first recurring payment
-
+        //  Check that contact has approval for at least the initial and first recurring payment
+        require((token.allowance(msg.sender, this) >= amountRequired),
+                'Insufficient approval for initial + 1x recurring amount');
 
         Subscription memory newSubscription = Subscription({
             owner: msg.sender,
@@ -74,14 +88,23 @@ contract ERC948 {
         // Save subscription
         bytes32 subscriptionId = keccak256(msg.sender, block.timestamp);
         subscriptions[subscriptionId] = newSubscription;
-        // TODO avoid hash clash
+        // TODO check for existing subscriptionId
 
         // Make initial payment
-    //    token.transferFrom(msg.sender, _payeeAddress, _amountInitial);
+        token.transferFrom(msg.sender, _payeeAddress, _amountInitial);
 
-        // TODO Emit event
+        // Emit NewSubscription event
+        emit NewSubscription(
+            subscriptionId,
+            _payeeAddress,
+            _tokenAddress,
+            _amountRecurring,
+            _amountInitial,
+            _periodType,
+            _periodMultiplier,
+            _startTime
+            );
 
-        // TODO return bytes32 subscriptionId
         return subscriptionId;
     }
 
@@ -109,6 +132,4 @@ contract ERC948 {
         token.transferFrom(subscription.owner, subscription.payeeAddress, _amount);
         return true;
     }
-
-
 }
