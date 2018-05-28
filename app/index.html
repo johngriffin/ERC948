@@ -1,0 +1,73 @@
+<html>
+<head>
+  <link rel="stylesheet" href="dist/bootstrap.min.css">
+  <script src="dist/bundle.js"></script>
+
+
+  <title>ERC948 Test App</title>
+</head>
+<body>
+
+      <!-- METAMASK NOT INSTALLED  -->
+
+      <div class="container" id="metamask-install" style="display:none">
+        <div class="row" style="margin: 50 0 50 0px">
+          <div class="col-md-12 text-center">
+            <h2>You need to install Metamask</h2>
+            <p>It looks like you're not using an ethereum enabled browser.  The simplest way to solve this is to</p>
+            <h4><a href="https://metamask.io/">Download Metamask</a></h4>
+            <p>You will need to install Metamask and then refresh this page.  If you are using the live ethereum network then you will also need to pay for some ether in your account.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- METAMASK NOT LOGGED IN  -->
+
+      <div class="container" id="metamask-login" style="display:none">
+        <div class="row" style="margin: 50 0 50 0px">
+          <div class="col-md-12 text-center">
+            <h2>You are not logged in to Metamask</h2>
+            <p>It looks like you have Metamask installed but you are not logged in.  Please log in and refresh the page</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- WRONG NETWORK  -->
+
+      <div class="container" id="metamask-network" style="display:none">
+        <div class="row" style="margin: 50 0 50 0px">
+          <div class="col-md-12 text-center">
+            <h2>Please use Ropsten Network</h2>
+            <p>This dapp is only available on the Ropsten network at the moment, please switch network in the top left hand corner of MetaMask.</p>
+            <p>You can then <a href="https://faucet.metamask.io/">collect some free ether from the faucet here</a>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT  -->
+
+      <div class="container col-xs-1 text-center" id="main-content" style="display:none">
+
+        <h1>ERC948 Test App</h1>
+
+        <p>You are logged in as:
+        <p class="text-muted"> <span id="eth_address"></span></p>
+        <br>
+
+        <p>You have <b><span id="token_count" class="text-success"></span></b> GTC tokens</p>
+
+        <div class="container">
+          <input type="text" class="input-sm text form-control approve_address" placeholder="Address to approve for 1000000">
+          <button class="approve btn btn-primary">Approve</button>
+        </div>
+        <br>
+        <!--
+        <div class="container">
+          <button class="create btn btn-success">createSubscription</button>
+        </div>
+        -->
+      </div>
+
+
+  </body>
+</html>
