@@ -4,20 +4,24 @@ import 'zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 
 contract ERC948 {
 
+    enum PeriodType {
+        Second
+    }
+
 	struct Subscription {
         address owner;
         address payeeAddress;
         address tokenAddress;
         uint amountRecurring;
         uint amountInitial;
+        uint periodType;
         uint periodMultiplier;
         uint startTime;
         string data;
         bool active;
+        uint nextPaymentTime;
 
-        // uint _periodType;
         // uint terminationDate;
-        // uint nextPaymentTime;
     }
 
     mapping (bytes32 => Subscription) public subscriptions;
@@ -57,6 +61,11 @@ contract ERC948 {
         public
         returns (bytes32)
     {
+        // Ensure that _periodType is valid
+        // TODO support hour, day, week, month, year
+        require((_periodType == 0),
+                'Only period types of second are supported');
+
         // Check that subscription start time is now or in the future
         require((_startTime >= block.timestamp),
                 'Subscription must not start in the past');
@@ -77,12 +86,17 @@ contract ERC948 {
             tokenAddress: _tokenAddress,
             amountRecurring: _amountRecurring,
             amountInitial: _amountInitial,
+            periodType: _periodType,
             periodMultiplier: _periodMultiplier,
-            startTime: _startTime,
-            data: _data,
-            active: true
 
-            // TODO set period  &  nextPaymentTime
+            // TODO set start time appropriately and deal with interaction w nextPaymentTime
+            startTime: block.timestamp,
+
+            data: _data,
+            active: true,
+
+            // TODO support hour, day, week, month, year
+            nextPaymentTime: block.timestamp + _periodMultiplier
         });
 
         // Save subscription
@@ -108,8 +122,33 @@ contract ERC948 {
         return subscriptionId;
     }
 
+
+    // TODO fix bug where this returns true for an unset subscriptionId
+    function paymentDue(bytes32 _subscriptionId)
+        public
+        view
+        returns (bool)
+    {
+        Subscription memory subscription = subscriptions[_subscriptionId];
+
+        // Check this is an active subscription
+        require((subscription.active == true), 'Not an active subscription');
+
+        // Check that subscription start time has passed
+        require((subscription.startTime <= block.timestamp),
+            'Subscription has not started yet');
+
+        // Check whether required time interval has passed since last payment
+        if (subscription.nextPaymentTime <= block.timestamp) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     /**
-    * @dev Called by or on behalf of the merchant, in order to initiate a scheduled/approved payment.
+    * @dev Called by or on behalf of the merchant, in order to initiate a payment.
     * @param _subscriptionId The subscription ID to process payments for
     * @param _amount Amount to be transferred, can be lower than total allowable amount
     * @return A boolean to indicate whether the payment was successful
@@ -123,13 +162,19 @@ contract ERC948 {
     {
         Subscription storage subscription = subscriptions[_subscriptionId];
 
-        require(_amount < subscription.amountRecurring);
-        require(block.timestamp > subscription.startTime);
+        require((_amount <= subscription.amountRecurring),
+            'Requested amount is higher than authorized');
 
-        // TODO ensure that a payment is due
+        require((paymentDue(_subscriptionId)),
+            'A Payment is not due for this subscription');
 
         StandardToken token = StandardToken(subscription.tokenAddress);
         token.transferFrom(subscription.owner, subscription.payeeAddress, _amount);
+
+        // Increment subscription nextPaymentTime by one interval
+        // TODO support hour, day, week, month, year
+        subscription.nextPaymentTime = subscription.nextPaymentTime + subscription.periodMultiplier;
         return true;
     }
+
 }
