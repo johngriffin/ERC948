@@ -8,7 +8,7 @@ contract ERC948 {
         Second
     }
 
-	struct Subscription {
+		struct Subscription {
         address owner;
         address payeeAddress;
         address tokenAddress;
