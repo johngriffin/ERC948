@@ -1,427 +1,151 @@
 module.exports = [
   {
     "constant": true,
-    "inputs": [],
-    "name": "mintingFinished",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "name",
-    "outputs": [
-      {
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_spender",
-        "type": "address"
-      },
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "approve",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "totalSupply",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_from",
-        "type": "address"
-      },
-      {
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferFrom",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "INITIAL_SUPPLY",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "decimals",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
     "inputs": [
       {
         "name": "",
-        "type": "address"
+        "type": "bytes32"
       }
     ],
-    "name": "last_claimed",
+    "name": "subscriptions",
     "outputs": [
       {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_spender",
-        "type": "address"
-      },
-      {
-        "name": "_subtractedValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "decreaseApproval",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_owner",
-        "type": "address"
-      }
-    ],
-    "name": "balanceOf",
-    "outputs": [
-      {
-        "name": "balance",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "MINTING_COEFFICIENT",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "symbol",
-    "outputs": [
-      {
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "transfer",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_spender",
-        "type": "address"
-      },
-      {
-        "name": "_addedValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "increaseApproval",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_owner",
-        "type": "address"
-      },
-      {
-        "name": "_spender",
-        "type": "address"
-      }
-    ],
-    "name": "allowance",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "Mint",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [],
-    "name": "MintFinished",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "name": "owner",
         "type": "address"
       },
       {
-        "indexed": true,
-        "name": "spender",
+        "name": "payeeAddress",
         "type": "address"
       },
       {
-        "indexed": false,
-        "name": "value",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
+        "name": "amountRecurring",
+        "type": "uint256"
+      },
+      {
+        "name": "amountInitial",
+        "type": "uint256"
+      },
+      {
+        "name": "periodType",
+        "type": "uint256"
+      },
+      {
+        "name": "periodMultiplier",
+        "type": "uint256"
+      },
+      {
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "name": "data",
+        "type": "string"
+      },
+      {
+        "name": "active",
+        "type": "bool"
+      },
+      {
+        "name": "nextPaymentTime",
         "type": "uint256"
       }
     ],
-    "name": "Approval",
-    "type": "event"
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "name": "from",
-        "type": "address"
+        "indexed": false,
+        "name": "_subscriptionId",
+        "type": "bytes32"
       },
       {
-        "indexed": true,
-        "name": "to",
+        "indexed": false,
+        "name": "_payeeAddress",
         "type": "address"
       },
       {
         "indexed": false,
-        "name": "value",
+        "name": "_tokenAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "_amountRecurring",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_amountInitial",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_periodType",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_periodMultiplier",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_startTime",
         "type": "uint256"
       }
     ],
-    "name": "Transfer",
+    "name": "NewSubscription",
     "type": "event"
   },
   {
     "constant": false,
     "inputs": [
       {
-        "name": "_coefficient",
+        "name": "_payeeAddress",
+        "type": "address"
+      },
+      {
+        "name": "_tokenAddress",
+        "type": "address"
+      },
+      {
+        "name": "_amountRecurring",
         "type": "uint256"
+      },
+      {
+        "name": "_amountInitial",
+        "type": "uint256"
+      },
+      {
+        "name": "_periodType",
+        "type": "uint256"
+      },
+      {
+        "name": "_periodMultiplier",
+        "type": "uint256"
+      },
+      {
+        "name": "_startTime",
+        "type": "uint256"
+      },
+      {
+        "name": "_data",
+        "type": "string"
       }
     ],
-    "name": "setMintingCoefficient",
+    "name": "createSubscription",
     "outputs": [
       {
         "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "finishMinting",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
+        "type": "bytes32"
       }
     ],
     "payable": false,
@@ -432,15 +156,15 @@ module.exports = [
     "constant": true,
     "inputs": [
       {
-        "name": "_user",
-        "type": "address"
+        "name": "_subscriptionId",
+        "type": "bytes32"
       }
     ],
-    "name": "checkEntitlement",
+    "name": "paymentDue",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "bool"
       }
     ],
     "payable": false,
@@ -449,8 +173,17 @@ module.exports = [
   },
   {
     "constant": false,
-    "inputs": [],
-    "name": "withdrawTokens",
+    "inputs": [
+      {
+        "name": "_subscriptionId",
+        "type": "bytes32"
+      },
+      {
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "processSubscription",
     "outputs": [
       {
         "name": "",
