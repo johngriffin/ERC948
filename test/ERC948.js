@@ -1,4 +1,4 @@
-// import assertRevert from "zeppelin-solidity/test/helpers/assertRevert";
+import assertRevert from "zeppelin-solidity/test/helpers/assertRevert";
 
 const TestToken = artifacts.require("TestToken");
 const ERC948 = artifacts.require("ERC948");
@@ -22,6 +22,7 @@ contract("TestToken", accounts => {
 
 contract("ERC948", accounts => {
 
+  // Helper function to set up a valid subscription
   async function createValidSubscription(TokenInstance, ERC948Instance) {
     // Approve the ERC948 contract to make transfers for accounts[0]
     await TokenInstance.approve(ERC948Instance.address, 1000);
@@ -44,7 +45,7 @@ contract("ERC948", accounts => {
     return response;
   }
 
-  // Return the first matching event in a tx response
+  // Helper function: Return the first matching event in a tx response
   function findEvent(response, eventName) {
     for (var i = 0; i < response.logs.length; i++) {
       var log = response.logs[i];
@@ -57,7 +58,15 @@ contract("ERC948", accounts => {
     return false;
   }
 
-  it("Should allow you to create a subscription with valid params", async () => {
+  // Helper function: Introduce a time delay
+  function timeOut(ms) {
+    return new Promise((fulfill) => {
+      setTimeout(fulfill, ms);
+  });
+}
+
+
+  it("CreateSubscription: Should allow you to create a subscription with valid params", async () => {
     let TokenInstance = await TestToken.deployed();
     let ERC948Instance = await ERC948.deployed();
 
@@ -65,35 +74,77 @@ contract("ERC948", accounts => {
     assert.property(response, 'tx');
   });
 
-  it("Should emit a NewSubscription event", async () => {
+  it("CreateSubscription: Should emit a NewSubscription event", async () => {
     let TokenInstance = await TestToken.deployed();
     let ERC948Instance = await ERC948.deployed();
 
     let response = await createValidSubscription(TokenInstance, ERC948Instance);
-
-    let success = false;
-
-    if (event = findEvent(response, "NewSubscription")) {
-        // We found the event!
-        success = true;
-    }
-
-    assert.equal(success, true);
+    let event = findEvent(response, "NewSubscription");
+    assert.notEqual(event, false);
   });
 
-  it("Should emit a NewSubscription event with a bytes32 subscription ID", async () => {
+  it("CreateSubscription: Should emit a NewSubscription event with a bytes32 subscription ID", async () => {
     let TokenInstance = await TestToken.deployed();
     let ERC948Instance = await ERC948.deployed();
 
     let response = await createValidSubscription(TokenInstance, ERC948Instance);
-    let subId = undefined;
-
-    if (event = findEvent(response, "NewSubscription")) {
-        // We found the event!
-        subId = event.args._subscriptionId;
-    }
-    assert.lengthOf(subId, 66)
+    let event = findEvent(response, "NewSubscription")
+    assert.lengthOf(event.args._subscriptionId, 66)
   });
 
+  it("CreateSubscription: Should pay amountInitial to accounts[1]", async () => {
+    let TokenInstance = await TestToken.deployed();
+    let ERC948Instance = await ERC948.deployed();
+
+    let r1 = await TokenInstance.balanceOf.call(accounts[1]);
+    let balance_before = r1.c[0];
+    await createValidSubscription(TokenInstance, ERC948Instance);
+    let r2 = await TokenInstance.balanceOf.call(accounts[1]);
+    let balance_after = r2.c[0];
+
+    assert.equal(balance_before+2, balance_after)
+  });
+
+  it("paymentDue: Should return false when valid subscription has no due payment", async () => {
+    let TokenInstance = await TestToken.deployed();
+    let ERC948Instance = await ERC948.deployed();
+
+    // subscription startTime is 10 seconds from now
+    let r1 = await createValidSubscription(TokenInstance, ERC948Instance);
+    let event = findEvent(r1, "NewSubscription")
+    let r2 = await ERC948Instance.paymentDue.call(event.args._subscriptionId)
+
+    assert.equal(r2, false)
+  });
+
+  it("paymentDue: Should revert if a subscriptionID does not exist", async () => {
+    let ERC948Instance = await ERC948.deployed();
+    await assertRevert(ERC948Instance.paymentDue.call('0x0'));
+  });
+
+  /*
+  it("paymentDue: Should return true when valid subscription has a due payment", async () => {
+    let TokenInstance = await TestToken.deployed();
+    let ERC948Instance = await ERC948.deployed();
+
+    // subscription startTime is 10 seconds from now
+    let r1 = await createValidSubscription(TokenInstance, ERC948Instance);
+    let event = findEvent(r1, "NewSubscription")
+    await timeOut(11000);
+    let r2 = await ERC948Instance.paymentDue.call(event.args._subscriptionId)
+
+    assert.equal(r2, true)
+  });
+  */
+
+  // createSubscription should revert if startTime is in the past
+  // createSubscription should revert if insufficient approval
+  // createSubscription should revert if insufficient balance
+  // createSubscription should revert if invalid PeriodType
+
+  // processSubscription should revert if amount is higher than authorized
+  // processSubscription should revert if payment is not paymentDue
+  // processSubscription should make a transfer
+  // processSubscription should set nextPaymentTime correctly
 
 });

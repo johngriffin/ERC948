@@ -1,3 +1,8 @@
+require('babel-register')({
+  ignore: /node_modules\/(?!zeppelin-solidity\/test\/helpers)/
+});
+require('babel-polyfill');
+
 const HDWalletProvider = require("truffle-hdwallet-provider");
 
 const mnemonic = process.env.MNEMONIC
