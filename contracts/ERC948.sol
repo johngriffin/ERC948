@@ -4,11 +4,11 @@ import 'zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 
 contract ERC948 {
 
-    enum PeriodType {
-        Second
-    }
+	enum PeriodType {
+      	Second
+  }
 
-		struct Subscription {
+	struct Subscription {
         address owner;
         address payeeAddress;
         address tokenAddress;
@@ -25,6 +25,7 @@ contract ERC948 {
     }
 
     mapping (bytes32 => Subscription) public subscriptions;
+    mapping (address => bytes32[]) public subscribers_subscriptions;
 
     event NewSubscription(
         bytes32 _subscriptionId,
@@ -104,6 +105,9 @@ contract ERC948 {
         subscriptions[subscriptionId] = newSubscription;
         // TODO check for existing subscriptionId
 
+        // Add subscription to subscriber
+        subscribers_subscriptions[msg.sender].push(subscriptionId);
+
         // Make initial payment
         token.transferFrom(msg.sender, _payeeAddress, _amountInitial);
 
@@ -122,8 +126,24 @@ contract ERC948 {
         return subscriptionId;
     }
 
+    /**
+    * @dev Get all subscriptions for a subscriber address
+    * @param _subscriber The address of the subscriber
+    * @return An array of bytes32 values that map to subscriptions
+    */
+     function getSubscribersSubscriptions(address _subscriber)
+        public
+        view
+        returns (bytes32[])
+    {
+        return subscribers_subscriptions[_subscriber];
+    }
 
-    // TODO fix bug where this returns true for an unset subscriptionId
+    /**
+    * @dev Called by or on behalf of the merchant to find whether a subscription has a payment due
+    * @param _subscriptionId The subscription ID to process payments for
+    * @return A boolean to indicate whether a payment is due
+    */
     function paymentDue(bytes32 _subscriptionId)
         public
         view
@@ -176,5 +196,4 @@ contract ERC948 {
         subscription.nextPaymentTime = subscription.nextPaymentTime + subscription.periodMultiplier;
         return true;
     }
-
 }
