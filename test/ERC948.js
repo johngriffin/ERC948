@@ -62,8 +62,8 @@ contract("ERC948", accounts => {
   function timeOut(ms) {
     return new Promise((fulfill) => {
       setTimeout(fulfill, ms);
-  });
-}
+    });
+  }
 
 
   it("CreateSubscription: Should allow you to create a subscription with valid params", async () => {

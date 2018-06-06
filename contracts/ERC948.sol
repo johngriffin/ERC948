@@ -4,11 +4,11 @@ import 'zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 
 contract ERC948 {
 
-	enum PeriodType {
-      	Second
-  }
+		enum PeriodType {
+        Second
+    }
 
-	struct Subscription {
+		struct Subscription {
         address owner;
         address payeeAddress;
         address tokenAddress;
@@ -140,6 +140,23 @@ contract ERC948 {
     }
 
     /**
+    * @dev Delete a subscription
+    * @param  _subscriptionId The subscription ID to delete
+    * @return true if the subscription has been deleted
+    */
+    function cancelSubscription(bytes32 _subscriptionId)
+        public
+        returns (bool)
+    {
+        Subscription storage subscription = subscriptions[_subscriptionId];
+        require((subscription.payeeAddress == msg.sender)
+            || (subscription.owner == msg.sender));
+
+        delete subscriptions[_subscriptionId];
+        return true;
+    }
+
+    /**
     * @dev Called by or on behalf of the merchant to find whether a subscription has a payment due
     * @param _subscriptionId The subscription ID to process payments for
     * @return A boolean to indicate whether a payment is due
@@ -196,4 +213,5 @@ contract ERC948 {
         subscription.nextPaymentTime = subscription.nextPaymentTime + subscription.periodMultiplier;
         return true;
     }
+
 }
