@@ -108,6 +108,8 @@ contract ERC948 {
 
             // TODO set start time appropriately and deal with interaction w nextPaymentTime
             startTime: block.timestamp,
+            //function timestampToDateTime(uint timestamp) public pure returns (uint year, uint month, uint day, uint hour, uint minute, uint second)
+
 
             data: _data,
             active: true,
@@ -228,11 +230,14 @@ contract ERC948 {
         // TODO support hour, day, week, month, year
         subscription.nextPaymentTime = subscription.nextPaymentTime + subscription.periodMultiplier;
         return true;
+        //TODO: See alternative to ^ below 
+        //  nextPaymentTime = block.now + (periodTypeInSeconds) * periodMultiplier
 
         //TODO - takes periodType and increments the subscription until further notice 
         function incrementNextPaymentTime(periodType){
              subscription.nextPaymentTime = uint32(subscription.nextPaymentTime + periodType);
             }
     }
+   
 
 }
