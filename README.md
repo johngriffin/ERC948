@@ -41,17 +41,17 @@ You can use the webapp to approve the subscription contract address to make tran
 
 ## Simple Summary
 
-A standard interface for preauthorized and recurring subscription payments.
+A standard interface for preauthorized, recurring subscription payments.
 
 ## Abstract
 
-This standard defines a contract interface enabling subscribers to express their intention to make regular recurring payments to a merchant, and for the contract to then make this payment on behalf of the subscriber at the appropriate interval.
+This standard defines a contract interface enabling subscribers to make recurring payments to a merchant, and for the contract to then make this payment on behalf of the subscriber at the predetermined interval.
 
-This standard provides basic functionality to initiate, approve and manage subscriptions between a subscriber and merchant. These subscriptions allow a merchant to transfer a pre-authorized amount of ERC-20 tokens within each recurring time interval.
+This standard provides basic functionality to initiate, approve, and manage subscriptions between a subscriber and merchant. These subscriptions allow a merchant to transfer a pre-authorized amount of ERC-20 tokens within each recurring time interval.
 
 ## Motivation
 
-We want wallets to understand that you’re about to sign a recurring payment contract so that they can present you with a UI summarizing the agreement you’re about to enter into. As your wallet now knows you’ve entered into a subscription contract it can also provide appropriate UI for managing and cancelling your subscriptions in future.
+We want wallets to understand that you’re about to sign a recurring payment contract so that they can present you with a UI summarizing the agreement you’re about to enter into. Since your wallet now knows you’ve entered into a subscription contract, it can also provide appropriate UI for managing and cancelling your subscriptions in future.
 
 
 ## Specification
