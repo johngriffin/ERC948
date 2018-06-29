@@ -1,14 +1,15 @@
 pragma solidity ^0.4.23;
 
 import 'zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
+import 'BokkyPooBahsDateTimeLibrary.sol';
 
 contract ERC948 {
 
-    enum PeriodType {
+  enum PeriodType {
         Second
     }
 
-    struct Subscription {
+  struct Subscription {
         address owner;
         address payeeAddress;
         address tokenAddress;
@@ -20,6 +21,7 @@ contract ERC948 {
         string data;
         bool active;
         uint nextPaymentTime;
+
         // uint terminationDate;
     }
 
@@ -63,6 +65,21 @@ contract ERC948 {
     {
         // Ensure that _periodType is valid
         // TODO support hour, day, week, month, year
+
+        //Already have library imported, but this is a helpful referecnce
+        /* function addYears(uint timestamp, uint _years) public pure returns (uint newTimestamp) {
+        newTimestamp = BokkyPooBahsDateTimeLibrary.addYears(timestamp, _years);
+    }
+    function addMonths(uint timestamp, uint _months) public pure returns (uint newTimestamp) {
+        newTimestamp = BokkyPooBahsDateTimeLibrary.addMonths(timestamp, _months);
+    }
+    function addDays(uint timestamp, uint _days) public pure returns (uint newTimestamp) {
+        newTimestamp = BokkyPooBahsDateTimeLibrary.addDays(timestamp, _days);
+    }
+    function addHours(uint timestamp, uint _hours) public pure returns (uint newTimestamp) {
+        newTimestamp = BokkyPooBahsDateTimeLibrary.addHours(timestamp, _hours);
+    } */
+
         require((_periodType == 0),
                 'Only period types of second are supported');
 
@@ -91,6 +108,8 @@ contract ERC948 {
 
             // TODO set start time appropriately and deal with interaction w nextPaymentTime
             startTime: block.timestamp,
+            //function timestampToDateTime(uint timestamp) public pure returns (uint year, uint month, uint day, uint hour, uint minute, uint second)
+
 
             data: _data,
             active: true,
@@ -211,6 +230,14 @@ contract ERC948 {
         // TODO support hour, day, week, month, year
         subscription.nextPaymentTime = subscription.nextPaymentTime + subscription.periodMultiplier;
         return true;
+        //TODO: See alternative to ^ below
+        //  nextPaymentTime = block.now + (periodTypeInSeconds) * periodMultiplier
+
+        //TODO - takes periodType and increments the subscription until further notice
+        function incrementNextPaymentTime(periodType){
+             subscription.nextPaymentTime = uint32(subscription.nextPaymentTime + periodType);
+            }
     }
+
 
 }
