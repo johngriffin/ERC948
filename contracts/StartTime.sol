@@ -30,4 +30,5 @@ contract StartTime {
       return dateTime.getHour(startTime);
 }
 
+//TODO: Test out these functions in ERC948.sol
 }
