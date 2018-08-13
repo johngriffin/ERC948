@@ -5,7 +5,11 @@ import 'zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 contract ERC948 {
 
     enum PeriodType {
-        Second
+        Second,
+        Day, 
+        Week, 
+        Month,
+        Year;
     }
 
     struct Subscription {
