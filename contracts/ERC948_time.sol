@@ -7,7 +7,11 @@ import 'BokkyPooBahsDateTimeLibrary/contracts/BokkyPooBahsDateTimeLibrary.sol';
 contract ERC948 {
 
   enum PeriodType {
-        Second
+        Second,
+        Day, 
+        Week, 
+        Month,
+        Year;
     }
 
   struct Subscription {
